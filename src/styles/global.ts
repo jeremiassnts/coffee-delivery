@@ -10,7 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     body, input, textarea, button {
         font-weight: 400;
         font-size: 1rem;
-        line-height: 130%;
+        line-height: 1.3;
     }
 
     body {
@@ -77,9 +77,9 @@ export const Tag = styled(Text)`
 export const ButtonG = styled(Text)`
     font-size: 0.875rem;
     font-weight: bold;
-    line-height: 160%;
+    line-height: 1.6;
 `
 export const ButtonM = styled(Text)`
     font-size: 0.75rem;
-    line-height: 160%;
+    line-height: 1.6;
 `
