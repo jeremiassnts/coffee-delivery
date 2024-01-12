@@ -12,6 +12,10 @@ export const GlobalStyle = createGlobalStyle`
         font-size: 1rem;
         line-height: 130%;
     }
+
+    body {
+        background-color: ${props => props.theme.background};
+    }
 `
 
 const Title = styled.span`
