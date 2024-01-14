@@ -3,14 +3,17 @@ import { defaultTheme } from "./styles/themes/default"
 import { GlobalStyle } from "./styles/global"
 import { BrowserRouter } from "react-router-dom"
 import { Router } from "./Router"
+import { ShoppingCartProvider } from "./contexts/shoppingCartContext"
 
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
-      <GlobalStyle />
+      <ShoppingCartProvider>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+        <GlobalStyle />
+      </ShoppingCartProvider>
     </ThemeProvider>
   )
 }

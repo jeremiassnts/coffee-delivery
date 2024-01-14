@@ -42,4 +42,20 @@ export const HeaderShoppingCart = styled.div`
     align-items: center;
     padding: 0.4rem;
     border-radius: 4px;
+    position: relative;
+`
+
+export const CartAmount = styled.div`
+    background-color: ${e => e.theme["yellow-dark"]};
+    color: ${e => e.theme["white"]};
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -0.9rem;
+    right: -0.75rem;
+    width: 25px;
+    height: 25px;
+    font-weight: bold;
 `

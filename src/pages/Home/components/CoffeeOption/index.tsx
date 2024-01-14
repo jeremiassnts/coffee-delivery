@@ -2,8 +2,25 @@ import { Minus, Plus, ShoppingCart } from "phosphor-react";
 import { Tag, TextMRegular, TextS, TitleM } from "../../../../styles/global";
 import { CoffeeData } from "../../coffees";
 import { AmountSelector, CoffeeAmountContainer, CoffeeDescription, CoffeeFooter, CoffeeName, CoffeeOptionContainer, CoffeePrice, CoffeeShoppingCart, CoffeeTags } from "./styles";
+import { useContext, useState } from "react";
+import { ShoppingCartContext } from "../../../../contexts/shoppingCartContext";
 
-export function CoffeeOption({ image, name, description, price, tags }: CoffeeData) {
+export function CoffeeOption({ id, image, name, description, price, tags }: CoffeeData) {
+    const [amount, setAmount] = useState(1)
+    const { addItemsToCart } = useContext(ShoppingCartContext)
+
+    function handleMinusAmount() {
+        setAmount(state => state <= 1 ? state : state - 1)
+    }
+
+    function handlePlusAmount() {
+        setAmount(state => state + 1)
+    }
+
+    function handleAddItemToCart() {
+        addItemsToCart(id, amount)
+    }
+
     return (
         <CoffeeOptionContainer>
             <img src={image} />
@@ -15,16 +32,16 @@ export function CoffeeOption({ image, name, description, price, tags }: CoffeeDa
             <CoffeeFooter>
                 <CoffeePrice>
                     <TextS>R$</TextS>
-                    <TitleM>{price.toString().replace('.', ',')}</TitleM>
+                    <TitleM>{price.toPrecision(3).replace('.', ',')}</TitleM>
                 </CoffeePrice>
                 <CoffeeAmountContainer>
                     <AmountSelector>
-                        <button><Minus /></button>
-                        <TextMRegular>1</TextMRegular>
-                        <button><Plus /></button>
+                        <button onClick={handleMinusAmount}><Minus /></button>
+                        <TextMRegular>{amount}</TextMRegular>
+                        <button onClick={handlePlusAmount}><Plus /></button>
                     </AmountSelector>
-                    <CoffeeShoppingCart>
-                        <ShoppingCart weight="fill" size={20}/>
+                    <CoffeeShoppingCart onClick={handleAddItemToCart}>
+                        <ShoppingCart weight="fill" size={20} />
                     </CoffeeShoppingCart>
                 </CoffeeAmountContainer>
             </CoffeeFooter>
