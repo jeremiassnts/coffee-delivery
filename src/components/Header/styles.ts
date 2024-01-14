@@ -8,6 +8,8 @@ export const Container = styled.header`
     position: fixed;
     width: 100vw;
     height: 8vh;
+    background-color: ${e => e.theme.background};
+    z-index: 999;
 `
 
 export const HeaderInfo = styled.div`

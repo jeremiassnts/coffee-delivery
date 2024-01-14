@@ -38,10 +38,10 @@ export const TitleL = styled(TitleBolder)`
     font-size: 2rem;
 `
 export const TitleM = styled(TitleBolder)`
-    font-size: 1.5;
+    font-size: 1.5rem;
 `
 export const TitleS = styled(TitleBold)`
-    font-size: 1.25;
+    font-size: 1.25rem;
 `
 export const TitleXS = styled(TitleBold)`
     font-size: 1.125rem;

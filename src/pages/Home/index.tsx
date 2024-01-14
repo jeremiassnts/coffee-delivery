@@ -1,9 +1,14 @@
 import { Coffee, Package, ShoppingCart, Timer } from "phosphor-react";
-import { Banner, BannerCoffee, BannerInfo, BannerInfoIcon, BannerInfoIconGroup, BannerInfoSubtitle, BannerInfoTitle, BannerPackage, BannerShoppingCart, BannerTimer, HomeContainer } from "./styles";
+import { Banner, BannerCoffee, BannerInfo, BannerInfoIcon, BannerInfoIconGroup, BannerInfoSubtitle, BannerInfoTitle, BannerPackage, BannerShoppingCart, BannerTimer, CoffeOptionsContainer, CoffeeTitle, CoffeesContainer, HomeContainer } from "./styles";
 import CoffeBanner from '../../assets/CoffeeBanner.svg'
 import { TextMRegular } from "../../styles/global";
+import { useState } from "react";
+import { CoffeeData, coffeesBase } from "./coffees";
+import { CoffeeOption } from "./components/CoffeeOption";
 
 export function Home() {
+    const [coffees] = useState<CoffeeData[]>(coffeesBase)
+
     return (
         <HomeContainer>
             <Banner>
@@ -31,6 +36,12 @@ export function Home() {
                 </BannerInfo>
                 <img src={CoffeBanner} />
             </Banner>
+            <CoffeesContainer>
+                <CoffeeTitle>Nossos cafés</CoffeeTitle>
+                <CoffeOptionsContainer>
+                    {coffees.map(coffee => <CoffeeOption key={coffee.id} {...coffee} />)}
+                </CoffeOptionsContainer>
+            </CoffeesContainer>
         </HomeContainer>
     )
 }

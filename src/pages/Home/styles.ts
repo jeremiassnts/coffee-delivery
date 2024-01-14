@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { TextLRegular, TitleXL } from "../../styles/global";
+import { TextLRegular, TitleL, TitleXL } from "../../styles/global";
 
 export const HomeContainer = styled.div`
     margin-top: 8vh;
+    padding: 5rem 10vw;
 `
 
 export const Banner = styled.div`
-    padding: 5rem 10vw;
     display: flex;
     gap: 4rem;
     justify-content: center;
@@ -69,4 +69,19 @@ export const BannerTimer = styled(BannerIcon)`
 
 export const BannerCoffee = styled(BannerIcon)`
     background-color: ${props => props.theme["purple"]};
+`
+
+export const CoffeesContainer = styled.div`
+    padding-top: 3rem;
+`
+
+export const CoffeeTitle = styled(TitleL)`
+    color: ${props => props.theme["base-subtitle"]};
+`
+
+export const CoffeOptionsContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3.5rem;
+    padding-top: 3rem;
 `
