@@ -129,10 +129,11 @@ export const AddressHeader = styled(TitleXS)`
 `
 
 export const AddressFormContainer = styled.div`
-    background-color: ${e => e.theme["base-card"]};
-    padding: 2rem;
     margin-top: 0.75rem;
     border-radius: 4px;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
 
     svg {
         color: ${e => e.theme["yellow-dark"]};
@@ -200,4 +201,43 @@ export const AddressFormInput = styled.input<AddressFormInputArguments>`
     &::placeholder {
         color: ${e => e.theme["base-label"]};
     }
+`
+
+export const PaymentTypes = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+`
+interface PaymentTypeArguments {
+    type: 'credit' | 'debit' | 'cash'
+    currentType: string
+}
+
+export const PaymentType = styled.button<PaymentTypeArguments>`
+    border: 1px solid ${e => e.type == e.currentType ? e.theme.purple : e.theme["base-button"]};
+    background-color: ${e => e.type == e.currentType ? e.theme["purple-light"] : e.theme["base-button"]};
+    border-radius: 4px;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    color: ${e => e.theme["base-text"]};
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: ${e => e.theme["base-hover"]};
+    }
+`
+
+export const AddressContainerSection = styled.div`
+    background-color: ${e => e.theme["base-card"]};
+    padding: 2rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 `
