@@ -123,3 +123,81 @@ export const CoffeeConfirmButton = styled.button`
         background-color: ${e => e.theme["yellow-dark"]};       
     }
 `
+
+export const AddressHeader = styled(TitleXS)`
+    color: ${e => e.theme["base-subtitle"]}
+`
+
+export const AddressFormContainer = styled.div`
+    background-color: ${e => e.theme["base-card"]};
+    padding: 2rem;
+    margin-top: 0.75rem;
+    border-radius: 4px;
+
+    svg {
+        color: ${e => e.theme["yellow-dark"]};
+    }
+
+    header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0.4rem;
+
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            span {
+                &:first-of-type {
+                    color: ${e => e.theme["base-subtitle"]};
+                }
+                &:last-of-type {
+                    color: ${e => e.theme["base-text"]};
+                }
+            }
+        }
+    }
+`
+
+export const AddressForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    div {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        position: relative;
+
+        span {
+            font-style: italic;
+            color: ${e => e.theme["base-label"]};
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    }
+`
+
+interface AddressFormInputArguments {
+    divWidth?: string
+}
+
+export const AddressFormInput = styled.input<AddressFormInputArguments>`
+    background-color: ${e => e.theme["base-input"]};
+    border: none;
+    padding: 1rem;
+    border-radius: 4px;
+    color: ${e => e.theme["base-text"]};
+    outline: none;
+    width: ${e => e.divWidth ? e.divWidth : "100%"};
+
+    &::placeholder {
+        color: ${e => e.theme["base-label"]};
+    }
+`

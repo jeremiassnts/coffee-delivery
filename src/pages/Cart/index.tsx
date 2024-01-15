@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { AddressContainer, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
+import { AddressContainer, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
 import { AmountSelector } from "../Home/components/CoffeeOption/styles";
-import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS } from "../../styles/global";
-import { Minus, Plus, Trash } from "phosphor-react";
+import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS, TextXS } from "../../styles/global";
+import { MapPinLine, Minus, Plus, Trash } from "phosphor-react";
 import { defaultTheme } from "../../styles/themes/default";
 
 interface CoffeeProductCartData {
@@ -44,7 +44,32 @@ export function Cart() {
 
     return (
         <CartContainer>
-            <AddressContainer></AddressContainer>
+            <AddressContainer>
+                <AddressHeader>Complete seu pedido</AddressHeader>
+                <AddressFormContainer>
+                    <header>
+                        <MapPinLine size={18} />
+                        <div>
+                            <TextMRegular>Endereço de Entrega</TextMRegular>
+                            <TextS>Informe o endereço onde deseja receber seu pedido</TextS>
+                        </div>
+                    </header>
+                    <AddressForm>
+                        <AddressFormInput name="cep" placeholder="CEP" />
+                        <AddressFormInput name="rua" placeholder="Rua" />
+                        <div>
+                            <AddressFormInput name="numero" placeholder="Número" divWidth="40%"/>
+                            <AddressFormInput name="complemento" placeholder="Complemento" divWidth="60%"/>
+                            <TextS>Opcional</TextS>
+                        </div>
+                        <div>
+                            <AddressFormInput name="bairro" placeholder="Bairro" divWidth="40%"/>
+                            <AddressFormInput name="cidade" placeholder="Cidade" divWidth="50%"/>
+                            <AddressFormInput name="uf" placeholder="UF" divWidth="10%"/>
+                        </div>
+                    </AddressForm>
+                </AddressFormContainer>
+            </AddressContainer>
             <ProductsContainer>
                 <ProductsHeader>Cafés selecionados</ProductsHeader>
                 <ProductsBody>
