@@ -34,7 +34,7 @@ export const Location = styled.div`
     }
 `
 
-export const HeaderShoppingCart = styled.div`
+export const HeaderShoppingCart = styled.button`
     background-color: ${props => props.theme["yellow-light"]};
     color: ${props => props.theme["yellow-dark"]};
     display: flex;
@@ -43,6 +43,13 @@ export const HeaderShoppingCart = styled.div`
     padding: 0.4rem;
     border-radius: 4px;
     position: relative;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: ${props => props.theme["yellow"]};
+    }
 `
 
 export const CartAmount = styled.div`

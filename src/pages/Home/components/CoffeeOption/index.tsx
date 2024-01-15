@@ -32,7 +32,7 @@ export function CoffeeOption({ id, image, name, description, price, tags }: Coff
             <CoffeeFooter>
                 <CoffeePrice>
                     <TextS>R$</TextS>
-                    <TitleM>{price.toPrecision(3).replace('.', ',')}</TitleM>
+                    <TitleM>{price.toFixed(2).replace('.', ',')}</TitleM>
                 </CoffeePrice>
                 <CoffeeAmountContainer>
                     <AmountSelector>

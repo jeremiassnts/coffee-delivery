@@ -8,6 +8,9 @@ export interface CartItemData {
 export interface ShoppingCartData {
     cart: CartItemData[]
     addItemsToCart: (itemId: number, amount: number) => void
+    addAmountOfItemsInCart: (itemId: number) => void
+    subtractAmountOfItemsInCart: (itemId: number) => void
+    removeItemFromCart: (itemId: number) => void
 }
 
 interface ShoppingCartContextArguments {
@@ -24,14 +27,27 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextArguments)
             itemId: itemId,
             amount
         }])
+    }
 
-        console.log(cart)
+    function addAmountOfItemsInCart(itemId: number) {
+        setCart(state => state.map(e => e.itemId == itemId ? { ...e, amount: e.amount + 1 } : e))
+    }
+
+    function subtractAmountOfItemsInCart(itemId: number) {
+        setCart(state => state.map(e => e.itemId == itemId && e.amount > 1 ? { ...e, amount: e.amount - 1 } : e))
+    }
+
+    function removeItemFromCart(itemId: number) {
+        setCart(state => state.filter(e => e.itemId != itemId))
     }
 
     return (
         <ShoppingCartContext.Provider value={{
             cart,
-            addItemsToCart
+            addItemsToCart,
+            addAmountOfItemsInCart,
+            subtractAmountOfItemsInCart,
+            removeItemFromCart
         }}>
             {children}
         </ShoppingCartContext.Provider>
