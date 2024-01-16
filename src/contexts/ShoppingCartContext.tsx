@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export interface CartItemData {
     itemId: number
@@ -21,7 +21,13 @@ interface ShoppingCartContextArguments {
 export const ShoppingCartContext = createContext({} as ShoppingCartData)
 
 export function ShoppingCartProvider({ children }: ShoppingCartContextArguments) {
-    const [cart, setCart] = useState<CartItemData[]>([])
+    const [cart, setCart] = useState<CartItemData[]>(() => {
+        const storedCart = localStorage.getItem('@coffee-delivery:cart-1.0.0')
+        if (storedCart) {
+            return JSON.parse(storedCart)
+        }
+        return []
+    })
 
     function addItemsToCart(itemId: number, amount: number) {
         setCart(state => [...state, {
@@ -45,6 +51,10 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextArguments)
     function cleanCart() {
         setCart(_ => [])
     }
+
+    useEffect(() => {
+        localStorage.setItem('@coffee-delivery:cart-1.0.0', JSON.stringify(cart))
+    }, [cart]);
 
     return (
         <ShoppingCartContext.Provider value={{
