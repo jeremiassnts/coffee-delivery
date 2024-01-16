@@ -49,7 +49,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextArguments)
     }
 
     function cleanCart() {
-        setCart(_ => [])
+        setCart(() => [])
     }
 
     useEffect(() => {

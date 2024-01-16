@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AddressCepInput, AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
@@ -7,7 +7,7 @@ import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS } from "../../styles/g
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Minus, Money, Plus, Trash } from "phosphor-react";
 import { defaultTheme } from "../../styles/themes/default";
 import { useForm } from "react-hook-form";
-import { input, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
@@ -44,7 +44,7 @@ export function Cart() {
         }
     })
     const coffees = cart.reduce((arr: CoffeeProductCartData[], e) => {
-        let index = arr.findIndex(a => a.coffee.id == e.itemId)
+        const index = arr.findIndex(a => a.coffee.id == e.itemId)
         if (index < 0) {
             arr.push({
                 coffee: coffeesBase.find(c => c.id == e.itemId),
@@ -91,7 +91,7 @@ export function Cart() {
     }
 
     function handleCepFill(event: React.ChangeEvent<HTMLInputElement>) {
-        var cep = event.target.value
+        let cep = event.target.value
         if (cep.replaceAll('_', '').length == 9) {
             cep = cep.replace('_', '')
             const cepSchema = z.object({
