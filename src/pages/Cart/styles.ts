@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TextMBold, TextMRegular, TitleXS } from "../../styles/global";
+import { TextMBold, TextMRegular, TextXS, TitleXS } from "../../styles/global";
 
 export const CartContainer = styled.div`
     display: flex;
@@ -119,8 +119,13 @@ export const CoffeeConfirmButton = styled.button`
     cursor: pointer;
     transition: all 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: ${e => e.theme["yellow-dark"]};       
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 `
 
@@ -179,27 +184,31 @@ export const AddressForm = styled.form`
             font-style: italic;
             color: ${e => e.theme["base-label"]};
             position: absolute;
-            top: 1rem;
+            top: 1.3rem;
             right: 1rem;
         }
     }
 `
 
 interface AddressFormInputArguments {
-    divWidth?: string
+    div_width?: string
 }
 
 export const AddressFormInput = styled.input<AddressFormInputArguments>`
     background-color: ${e => e.theme["base-input"]};
-    border: none;
+    border: solid 1px ${e => e.theme["base-input"]};
     padding: 1rem;
     border-radius: 4px;
     color: ${e => e.theme["base-text"]};
     outline: none;
-    width: ${e => e.divWidth ? e.divWidth : "100%"};
+    width: ${e => e.div_width ? e.div_width : "100%"};
 
     &::placeholder {
         color: ${e => e.theme["base-label"]};
+    }
+
+    &:focus {
+        border: solid 1px ${e => e.theme["yellow-dark"]};
     }
 `
 
@@ -211,12 +220,12 @@ export const PaymentTypes = styled.div`
 `
 interface PaymentTypeArguments {
     type: 'credit' | 'debit' | 'cash'
-    currentType: string
+    current_type: string
 }
 
 export const PaymentType = styled.button<PaymentTypeArguments>`
-    border: 1px solid ${e => e.type == e.currentType ? e.theme.purple : e.theme["base-button"]};
-    background-color: ${e => e.type == e.currentType ? e.theme["purple-light"] : e.theme["base-button"]};
+    border: 1px solid ${e => e.type == e.current_type ? e.theme.purple : e.theme["base-button"]};
+    background-color: ${e => e.type == e.current_type ? e.theme["purple-light"] : e.theme["base-button"]};
     border-radius: 4px;
     padding: 1rem;
     display: flex;
@@ -240,4 +249,8 @@ export const AddressContainerSection = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+`
+
+export const ErrorMessage = styled(TextMRegular)`
+
 `

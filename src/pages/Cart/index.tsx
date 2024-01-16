@@ -1,20 +1,46 @@
 import { useContext, useState } from "react";
-import { AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, PaymentContainer, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
+import { AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentContainer, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
 import { AmountSelector } from "../Home/components/CoffeeOption/styles";
-import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS, TextXS } from "../../styles/global";
+import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS } from "../../styles/global";
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Minus, Money, Plus, Trash } from "phosphor-react";
 import { defaultTheme } from "../../styles/themes/default";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface CoffeeProductCartData {
     coffee: CoffeeData
     amount: number
 }
 
+const addressFormSchema = z.object({
+    cep: z.string().min(8, 'Campo CEP não é válido').max(8),
+    rua: z.string().min(1, 'Campo Rua é obrigatório'),
+    numero: z.coerce.number().min(1, 'Campo Número é obrigatório').nullable(),
+    complemento: z.string().optional(),
+    bairro: z.string().min(1, 'Campo Bairro é obrigatório'),
+    cidade: z.string().min(1, 'Campo Cidade é obrigatório'),
+    uf: z.string().min(1, 'Campo UF é obrigatório').max(2, 'Campo deve ter no máximo 2 caracteres')
+})
+type AddressFormInterface = z.infer<typeof addressFormSchema>
+
 export function Cart() {
     const [paymentType, setPaymentType] = useState("")
     const { cart, addAmountOfItemsInCart, subtractAmountOfItemsInCart, removeItemFromCart } = useContext(ShoppingCartContext)
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<AddressFormInterface>({
+        resolver: zodResolver(addressFormSchema),
+        defaultValues: {
+            cep: '',
+            bairro: '',
+            cidade: '',
+            complemento: '',
+            numero: null,
+            rua: '',
+            uf: ''
+        }
+    })
     const coffees = cart.reduce((arr: CoffeeProductCartData[], e) => {
         let index = arr.findIndex(a => a.coffee.id == e.itemId)
         if (index < 0) {
@@ -47,6 +73,10 @@ export function Cart() {
         setPaymentType(paymentType)
     }
 
+    function handleConfirmOrder() {
+        console.log("sucesso")
+    }
+
     return (
         <CartContainer>
             <AddressContainer>
@@ -61,17 +91,23 @@ export function Cart() {
                             </div>
                         </header>
                         <AddressForm>
-                            <AddressFormInput name="cep" placeholder="CEP" />
-                            <AddressFormInput name="rua" placeholder="Rua" />
+                            {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
+                            <AddressFormInput placeholder="CEP" required {...register("cep")} />
+                            {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
+                            <AddressFormInput placeholder="Rua" required {...register("rua")} />
+                            {errors.numero && <ErrorMessage>{errors.numero.message}</ErrorMessage>}
                             <div>
-                                <AddressFormInput name="numero" placeholder="Número" divWidth="40%" />
-                                <AddressFormInput name="complemento" placeholder="Complemento" divWidth="60%" />
+                                <AddressFormInput type="number" placeholder="Número" div_width="40%" required {...register("numero")} />
+                                <AddressFormInput placeholder="Complemento" div_width="60%" {...register("complemento")} />
                                 <TextS>Opcional</TextS>
                             </div>
+                            {errors.bairro && <ErrorMessage>{errors.bairro.message}</ErrorMessage>}
+                            {errors.cidade && <ErrorMessage>{errors.cidade.message}</ErrorMessage>}
+                            {errors.uf && <ErrorMessage>{errors.uf.message}</ErrorMessage>}
                             <div>
-                                <AddressFormInput name="bairro" placeholder="Bairro" divWidth="40%" />
-                                <AddressFormInput name="cidade" placeholder="Cidade" divWidth="50%" />
-                                <AddressFormInput name="uf" placeholder="UF" divWidth="10%" />
+                                <AddressFormInput placeholder="Bairro" div_width="40%" required {...register("bairro")} />
+                                <AddressFormInput placeholder="Cidade" div_width="50%" required {...register("cidade")} />
+                                <AddressFormInput placeholder="UF" div_width="10%" {...register("uf")} />
                             </div>
                         </AddressForm>
                     </AddressContainerSection>
@@ -85,15 +121,15 @@ export function Cart() {
                             </div>
                         </header>
                         <PaymentTypes>
-                            <PaymentType onClick={() => handlePaymentSelection("credit")} currentType={paymentType} type="credit">
+                            <PaymentType onClick={() => handlePaymentSelection("credit")} current_type={paymentType} type="credit">
                                 <CreditCard size={16} color={defaultTheme.purple} />
                                 <ButtonM>Cartão de crédito</ButtonM>
                             </PaymentType>
-                            <PaymentType onClick={() => handlePaymentSelection("debit")} currentType={paymentType} type="debit">
+                            <PaymentType onClick={() => handlePaymentSelection("debit")} current_type={paymentType} type="debit">
                                 <Bank size={16} color={defaultTheme.purple} />
                                 <ButtonM>cartão de débito</ButtonM>
                             </PaymentType>
-                            <PaymentType onClick={() => handlePaymentSelection("cash")} currentType={paymentType} type="cash">
+                            <PaymentType onClick={() => handlePaymentSelection("cash")} current_type={paymentType} type="cash">
                                 <Money size={16} color={defaultTheme.purple} />
                                 <ButtonM>dinheiro</ButtonM>
                             </PaymentType>
@@ -138,7 +174,7 @@ export function Cart() {
                         <TextLBold>Total</TextLBold>
                         <TextLBold>R$ {((itemTotal + deliveryFee).toFixed(2).replace('.', ','))}</TextLBold>
                     </CoffeeTitle>
-                    <CoffeeConfirmButton><ButtonG>confirmar pedido</ButtonG></CoffeeConfirmButton>
+                    <CoffeeConfirmButton onClick={handleSubmit(handleConfirmOrder)} disabled={!paymentType || cart.length == 0}><ButtonG>confirmar pedido</ButtonG></CoffeeConfirmButton>
                 </ProductsBody>
             </ProductsContainer>
         </CartContainer >
