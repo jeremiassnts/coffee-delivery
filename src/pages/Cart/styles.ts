@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { TextMBold, TextMRegular, TextXS, TitleXS } from "../../styles/global";
+import styled, { css } from "styled-components";
+import { TextMBold, TextMRegular, TitleXS } from "../../styles/global";
+import InputMask from 'react-input-mask'
 
 export const CartContainer = styled.div`
     display: flex;
@@ -194,7 +195,7 @@ interface AddressFormInputArguments {
     div_width?: string
 }
 
-export const AddressFormInput = styled.input<AddressFormInputArguments>`
+const addressFormInputCss = css<AddressFormInputArguments>`
     background-color: ${e => e.theme["base-input"]};
     border: solid 1px ${e => e.theme["base-input"]};
     padding: 1rem;
@@ -210,6 +211,14 @@ export const AddressFormInput = styled.input<AddressFormInputArguments>`
     &:focus {
         border: solid 1px ${e => e.theme["yellow-dark"]};
     }
+`
+
+export const AddressFormInput = styled.input<AddressFormInputArguments>`
+    ${addressFormInputCss}
+`
+
+export const AddressCepInput = styled(InputMask)<AddressFormInputArguments>`
+    ${addressFormInputCss}
 `
 
 export const PaymentTypes = styled.div`
@@ -251,6 +260,4 @@ export const AddressContainerSection = styled.div`
     gap: 1rem;
 `
 
-export const ErrorMessage = styled(TextMRegular)`
-
-`
+export const ErrorMessage = styled(TextMRegular)``

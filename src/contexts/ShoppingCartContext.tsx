@@ -11,6 +11,7 @@ export interface ShoppingCartData {
     addAmountOfItemsInCart: (itemId: number) => void
     subtractAmountOfItemsInCart: (itemId: number) => void
     removeItemFromCart: (itemId: number) => void
+    cleanCart: () => void
 }
 
 interface ShoppingCartContextArguments {
@@ -41,13 +42,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextArguments)
         setCart(state => state.filter(e => e.itemId != itemId))
     }
 
+    function cleanCart() {
+        setCart(_ => [])
+    }
+
     return (
         <ShoppingCartContext.Provider value={{
             cart,
             addItemsToCart,
             addAmountOfItemsInCart,
             subtractAmountOfItemsInCart,
-            removeItemFromCart
+            removeItemFromCart,
+            cleanCart
         }}>
             {children}
         </ShoppingCartContext.Provider>

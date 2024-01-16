@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
+import { AddressCepInput, AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
 import { AmountSelector } from "../Home/components/CoffeeOption/styles";
@@ -17,7 +17,7 @@ interface CoffeeProductCartData {
 }
 
 const addressFormSchema = z.object({
-    cep: z.string().min(8, 'Campo CEP não é válido').max(8),
+    cep: z.string().min(9, 'Campo CEP não é válido').max(9),
     rua: z.string().min(1, 'Campo Rua é obrigatório'),
     numero: z.coerce.number().min(1, 'Campo Número é obrigatório').nullable(),
     complemento: z.string().optional(),
@@ -30,7 +30,7 @@ type AddressFormInterface = z.infer<typeof addressFormSchema>
 export function Cart() {
     const navigate = useNavigate()
     const [paymentType, setPaymentType] = useState("")
-    const { cart, addAmountOfItemsInCart, subtractAmountOfItemsInCart, removeItemFromCart } = useContext(ShoppingCartContext)
+    const { cart, addAmountOfItemsInCart, subtractAmountOfItemsInCart, removeItemFromCart, cleanCart } = useContext(ShoppingCartContext)
     const { register, handleSubmit, watch, formState: { errors } } = useForm<AddressFormInterface>({
         resolver: zodResolver(addressFormSchema),
         defaultValues: {
@@ -76,6 +76,7 @@ export function Cart() {
     }
 
     function handleConfirmOrder() {
+        cleanCart()
         navigate('/confirmation', {
             state: {
                 bairro: watch('bairro'),
@@ -83,7 +84,7 @@ export function Cart() {
                 numero: watch('numero'),
                 rua: watch('rua'),
                 uf: watch('uf'),
-                paymentType: paymentType == 'credit' ? 'Crédito' : paymentType == 'debit' ? 'Débito' : 'Dinheiro'
+                paymentType: paymentType == 'credit' ? 'Cartão de Crédito' : paymentType == 'debit' ? 'Cartão de Débito' : 'Dinheiro'
             }
         })
     }
@@ -103,7 +104,7 @@ export function Cart() {
                         </header>
                         <AddressForm>
                             {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
-                            <AddressFormInput placeholder="CEP" required {...register("cep")} />
+                            <AddressCepInput placeholder="CEP" required {...register("cep")} mask={'99999-999'}/>
                             {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
                             <AddressFormInput placeholder="Rua" required {...register("rua")} />
                             {errors.numero && <ErrorMessage>{errors.numero.message}</ErrorMessage>}
