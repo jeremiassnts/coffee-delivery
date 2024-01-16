@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentContainer, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
+import { AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
 import { AmountSelector } from "../Home/components/CoffeeOption/styles";
@@ -9,6 +9,7 @@ import { defaultTheme } from "../../styles/themes/default";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 interface CoffeeProductCartData {
     coffee: CoffeeData
@@ -27,6 +28,7 @@ const addressFormSchema = z.object({
 type AddressFormInterface = z.infer<typeof addressFormSchema>
 
 export function Cart() {
+    const navigate = useNavigate()
     const [paymentType, setPaymentType] = useState("")
     const { cart, addAmountOfItemsInCart, subtractAmountOfItemsInCart, removeItemFromCart } = useContext(ShoppingCartContext)
     const { register, handleSubmit, watch, formState: { errors } } = useForm<AddressFormInterface>({
@@ -74,7 +76,16 @@ export function Cart() {
     }
 
     function handleConfirmOrder() {
-        console.log("sucesso")
+        navigate('/confirmation', {
+            state: {
+                bairro: watch('bairro'),
+                cidade: watch('cidade'),
+                numero: watch('numero'),
+                rua: watch('rua'),
+                uf: watch('uf'),
+                paymentType: paymentType == 'credit' ? 'Crédito' : paymentType == 'debit' ? 'Débito' : 'Dinheiro'
+            }
+        })
     }
 
     return (
