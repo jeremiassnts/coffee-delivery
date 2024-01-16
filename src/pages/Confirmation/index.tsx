@@ -11,11 +11,12 @@ interface ConfirmationArguments {
     numero: number
     rua: string
     uf: string
+    complemento: string
     paymentType: string
 }
 export function Confirmation() {
     const { state } = useLocation()
-    const { bairro, cidade, numero, paymentType, rua, uf } = state as ConfirmationArguments
+    const { bairro, cidade, numero, paymentType, rua, uf, complemento } = state as ConfirmationArguments
     return (
         <ConfirmationContainer>
             <ConfirmationDeliveryInfo>
@@ -27,7 +28,7 @@ export function Confirmation() {
                     <ConfirmationBody>
                         <ConfirmationText background={defaultTheme.purple}>
                             <div><MapPin color={defaultTheme.white} size={13} weight="fill" /></div>
-                            <TextS>Entrega em Rua <strong>{rua}, {numero}</strong><br />{bairro} - {cidade}, {uf}</TextS>
+                            <TextS>Entrega em Rua <strong>{rua}, {numero} {complemento}</strong><br />{bairro} - {cidade}, {uf}</TextS>
                         </ConfirmationText>
                         <ConfirmationText background={defaultTheme.yellow}>
                             <div><Timer color={defaultTheme.white} size={13} weight="fill" /></div>

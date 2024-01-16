@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { SyntheticEvent, useContext, useState } from "react";
 import { AddressCepInput, AddressContainer, AddressContainerSection, AddressForm, AddressFormContainer, AddressFormInput, AddressHeader, CartContainer, CoffeeCartItem, CoffeeCartItemButtons, CoffeeCartItemDelete, CoffeeCartItemInfo, CoffeeCartItemName, CoffeeCartItemNamePrice, CoffeeCartItemPrice, CoffeeConfirmButton, CoffeeSubtitle, CoffeeTitle, ErrorMessage, PaymentType, PaymentTypes, ProductsBody, ProductsContainer, ProductsHeader } from "./styles";
 import { ShoppingCartContext } from "../../contexts/shoppingCartContext";
 import { CoffeeData, coffeesBase } from "../Home/coffees";
@@ -7,7 +7,7 @@ import { ButtonG, ButtonM, TextLBold, TextMRegular, TextS } from "../../styles/g
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Minus, Money, Plus, Trash } from "phosphor-react";
 import { defaultTheme } from "../../styles/themes/default";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { input, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,7 @@ export function Cart() {
     const navigate = useNavigate()
     const [paymentType, setPaymentType] = useState("")
     const { cart, addAmountOfItemsInCart, subtractAmountOfItemsInCart, removeItemFromCart, cleanCart } = useContext(ShoppingCartContext)
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<AddressFormInterface>({
+    const { register, handleSubmit, watch, formState: { errors } , setValue} = useForm<AddressFormInterface>({
         resolver: zodResolver(addressFormSchema),
         defaultValues: {
             cep: '',
@@ -84,9 +84,36 @@ export function Cart() {
                 numero: watch('numero'),
                 rua: watch('rua'),
                 uf: watch('uf'),
+                complemento: watch('complemento'),
                 paymentType: paymentType == 'credit' ? 'Cartão de Crédito' : paymentType == 'debit' ? 'Cartão de Débito' : 'Dinheiro'
             }
         })
+    }
+
+    function handleCepFill(event: React.ChangeEvent<HTMLInputElement>) {
+        var cep = event.target.value
+        if (cep.replaceAll('_', '').length == 9) {
+            cep = cep.replace('_', '')
+            const cepSchema = z.object({
+                bairro: z.string(),
+                complemento: z.string(),
+                localidade: z.string(),
+                logradouro: z.string(),
+                uf: z.string()
+            })
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(response => {
+                    if (!response.erro) {
+                        const cepInformation = cepSchema.parse(response)
+                        setValue('bairro', cepInformation.bairro)
+                        setValue('cidade', cepInformation.localidade)
+                        setValue('complemento', cepInformation.complemento)
+                        setValue('rua', cepInformation.logradouro)
+                        setValue('uf', cepInformation.uf)
+                    }
+                })
+        }
     }
 
     return (
@@ -104,7 +131,7 @@ export function Cart() {
                         </header>
                         <AddressForm>
                             {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
-                            <AddressCepInput placeholder="CEP" required {...register("cep")} mask={'99999-999'}/>
+                            <AddressCepInput placeholder="CEP" required {...register("cep")} mask={'99999-999'} onChange={handleCepFill} />
                             {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
                             <AddressFormInput placeholder="Rua" required {...register("rua")} />
                             {errors.numero && <ErrorMessage>{errors.numero.message}</ErrorMessage>}
